@@ -1,0 +1,5 @@
+&nf_retry
+nf_retry_wait=1,
+nf_retry_max_tries=3,
+nf_retry_catch=0,1,3,2
+/
