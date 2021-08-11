@@ -22,7 +22,9 @@ are automatically printed). `nf_retry` can be enabled and configured by creating
 
 ### Implementing nf_retry
 
-Use the `nf_retry` module and replace `nf90_open` calls with `nf90_open_with_retries`.
+Copy `nf_retry.f90` into your source code and add include it in your build.
+
+Include the `nf_retry` module and replace `nf90_open` calls with `nf90_open_with_retries`.
 
 ```diff
 +  use nf_retry
@@ -30,5 +32,3 @@ Use the `nf_retry` module and replace `nf90_open` calls with `nf90_open_with_ret
 -  status = nf90_open(path, mode, ncid)
 +  status = nf90_open_with_retries(path, mode, ncid)
 ```
-
-Make sure to add `nf_retry.f90` to you build.

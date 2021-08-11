@@ -1,3 +1,7 @@
+! nf90_open_with_retries
+!  VERSION     1.0.0
+!  REPOSITORY  https://github.com/LiamBindle/nf90_open_with_retries
+
 module nf_retry 
    use netcdf
    implicit none
