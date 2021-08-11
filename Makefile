@@ -1,7 +1,7 @@
 all: simple_xy_wr simple_xy_rd simple_xy_rd_retry
 
 clean:
-	rm -f simple_xy_wr simple_xy_rd simple_xy.nc *.mod
+	rm -f simple_xy_wr simple_xy_rd simple_xy.nc *.mod simple_xy_rd_retry
 
 FFLAGS = $(shell nf-config --cflags) $(shell nf-config --fflags) -g
 LDFLAGS = $(shell nf-config --flibs)

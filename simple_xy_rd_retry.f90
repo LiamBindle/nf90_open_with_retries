@@ -37,8 +37,6 @@ program simple_xy_rd
   ! print '("nf_retry: Caught netcdf error code(", I0,"): ",A)',NX,nf90_strerror(NX)
   ! print '("nf_retry: Retrying in ", I0,"s.")',11
 
-
-  call nf_retry_init()
   ! stop "Done"
 
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to

@@ -5,6 +5,8 @@ module nf_retry
    integer :: nf_retry_wait
    integer :: nf_retry_max_tries
    logical :: nf_retry_catch_all
+
+   logical :: nf_retry_is_initialized = .false.
 contains  
    function nf90_open_with_retries(path, mode, ncid) result(status)
       implicit none
@@ -18,6 +20,9 @@ contains
       
       status = nf90_open(path, mode, ncid)
       if(status /= nf90_noerr) then
+         if (.not. nf_retry_is_initialized) then
+            call nf_retry_init()
+         end if
          print '("nf90_open: Error code (", I0,") opening ", A, " [", A,"]")',status,trim(path),trim(nf90_strerror(status))
          do while ( ( status /= nf90_noerr ) .and. &
                      ( any(nf_retry_catch==status) .or. nf_retry_catch_all ) .and. &
@@ -52,6 +57,8 @@ contains
          open (unit=fh, file=filepath)
          read (nml=nf_retry, unit=fh)
       end if
+
+      nf_retry_is_initialized = .true.
    end subroutine
 
 end module nf_retry
