@@ -1,7 +1,7 @@
-all: simple_xy_wr simple_xy_rd simple_xy_rd_retry
+all: sandbox/simple_xy_wr sandbox/simple_xy_rd sandbox/simple_xy_rd_with_retries
 
 clean:
-	rm -f simple_xy_wr simple_xy_rd simple_xy.nc *.mod simple_xy_rd_retry
+	rm -f sandbox/simple_xy_wr sandbox/simple_xy_rd sandbox/simple_xy.nc *.mod sandbox/simple_xy_rd_with_retries
 
 FFLAGS = $(shell nf-config --cflags) $(shell nf-config --fflags) -g
 LDFLAGS = $(shell nf-config --flibs)
@@ -9,11 +9,11 @@ LDFLAGS = $(shell nf-config --flibs)
 
 @PHONY: all clean
 
-simple_xy_wr: simple_xy_wr.f90
+sandbox/simple_xy_wr: sandbox/simple_xy_wr.f90
 	gfortran $(FFLAGS) $^ -o $@ $(LDFLAGS)
 
-simple_xy_rd: simple_xy_rd.f90
+sandbox/simple_xy_rd: sandbox/simple_xy_rd.f90
 	gfortran $(FFLAGS) $^ -o $@ $(LDFLAGS)
 
-simple_xy_rd_retry: nf_retry.f90 simple_xy_rd_retry.f90
+sandbox/simple_xy_rd_with_retries: nf_retry.f90 sandbox/simple_xy_rd_with_retries.f90
 	gfortran $(FFLAGS) $^ -o $@ $(LDFLAGS)

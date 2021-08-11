@@ -33,15 +33,8 @@ program simple_xy_rd
   ! Loop indexes, and error handling.
   integer :: x, y
 
-  ! !write(*,*) 'error code(',NX,'): ',nf90_strerror(NX)
-  ! print '("nf_retry: Caught netcdf error code(", I0,"): ",A)',NX,nf90_strerror(NX)
-  ! print '("nf_retry: Retrying in ", I0,"s.")',11
-
-  ! stop "Done"
-
   ! Open the file. NF90_NOWRITE tells netCDF we want read-only access to
   ! the file.
-  ! call check( nf90_open(FILE_NAME, NF90_NOWRITE, ncid) )
   call check( nf90_open_with_retries(FILE_NAME, NF90_NOWRITE, ncid) )
 
   ! Get the varid of the data variable, based on its name.

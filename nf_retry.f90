@@ -1,5 +1,5 @@
 ! nf90_open_with_retries
-!  VERSION     1.0.0
+!  VERSION     1.0.2
 !  REPOSITORY  https://github.com/LiamBindle/nf90_open_with_retries
 
 module nf_retry 
