@@ -17,10 +17,11 @@ contains
       
       status = nf90_open(path, mode, ncid)
       if(status /= nf90_noerr) then
-         print '("nf90_open: error(", I0,"): ",A)',status,nf90_strerror(status)
+         print '("nf90_open: error code (", I0,") opening ", A,": ",A)',status,trim(path),trim(nf90_strerror(status))
          do while ( (status /= nf90_noerr) .and. ( any(nf_retry_catch==status) ) .and. (retry_attempts < nf_retry_max_tries) )
-            print '("nf_retry: Caught netcdf error code(", I0,"): ",A)',status,nf90_strerror(status)
-            print '("nf_retry: Retrying in ", I0,"s")',nf_retry_wait
+            print '(" nf_retry: Caught netcdf error code(", I0,") opening ", A,": ",A)',&
+               status,trim(path),trim(nf90_strerror(status))
+            print '(" nf_retry: Retrying in ", I0,"s")',nf_retry_wait
             call sleep(nf_retry_wait)
             status = nf90_open(path, mode, ncid)
             retry_attempts = retry_attempts + 1
