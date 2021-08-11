@@ -1,5 +1,6 @@
 &nf_retry
-nf_retry_wait=1,
-nf_retry_max_tries=3,
-nf_retry_catch=0,1,3,2
+    nf_retry_wait=1,            ! Seconds to wait before retry
+    nf_retry_max_tries=3,       ! Max number of retries before failure
+    nf_retry_catch=0,1,3,2,     ! NetCDF error codes to catch
+    nf_retry_catch_all=F,       ! Catch all NetCDF errors?
 /

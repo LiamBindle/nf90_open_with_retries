@@ -4,6 +4,7 @@ module nf_retry
    integer :: nf_retry_catch(20)
    integer :: nf_retry_wait
    integer :: nf_retry_max_tries
+   logical :: nf_retry_catch_all
 contains  
    function nf90_open_with_retries(path, mode, ncid) result(status)
       implicit none
@@ -17,11 +18,13 @@ contains
       
       status = nf90_open(path, mode, ncid)
       if(status /= nf90_noerr) then
-         print '("nf90_open: error code (", I0,") opening ", A,": ",A)',status,trim(path),trim(nf90_strerror(status))
-         do while ( (status /= nf90_noerr) .and. ( any(nf_retry_catch==status) ) .and. (retry_attempts < nf_retry_max_tries) )
-            print '(" nf_retry: Caught netcdf error code(", I0,") opening ", A,": ",A)',&
+         print '("nf90_open: Error code (", I0,") opening ", A, " [", A,"]")',status,trim(path),trim(nf90_strerror(status))
+         do while ( ( status /= nf90_noerr ) .and. &
+                     ( any(nf_retry_catch==status) .or. nf_retry_catch_all ) .and. &
+                     ( retry_attempts < nf_retry_max_tries ) )
+            print '("   caught: Error code (", I0,") opening ", A, " [", A,"]")',&
                status,trim(path),trim(nf90_strerror(status))
-            print '(" nf_retry: Retrying in ", I0,"s")',nf_retry_wait
+            print '("           Retrying in ", I0,"s")',nf_retry_wait
             call sleep(nf_retry_wait)
             status = nf90_open(path, mode, ncid)
             retry_attempts = retry_attempts + 1
@@ -36,12 +39,13 @@ contains
       character(len=*) :: filepath
       parameter (filepath = 'nf_retry.nml')
       
-      namelist /nf_retry/ nf_retry_wait, nf_retry_max_tries, nf_retry_catch
+      namelist /nf_retry/ nf_retry_wait, nf_retry_max_tries, nf_retry_catch, nf_retry_catch_all
       
       ! Initialize nf_retry settings
       nf_retry_catch(:) = nf90_noerr ! Safe b/c we never catch nf90_noerr
       nf_retry_wait=10
       nf_retry_max_tries=1000
+      nf_retry_catch_all=.false.
 
       inquire (file=filepath, exist=exists)
       if (exists) then
